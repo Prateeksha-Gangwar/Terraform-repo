@@ -15,7 +15,7 @@ provider "aws" {
 
 resource "aws_instance" "example" {
   ami           = "ami-06067086cf86c58e6"
-  instance_type = "t3.medium"
+  instance_type = "t1.medium"
 
   tags = {
     Name = "webserver"
