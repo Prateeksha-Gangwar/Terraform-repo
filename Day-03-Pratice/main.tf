@@ -1,6 +1,6 @@
 resource "aws_instance" "name" {
     ami           = var.ami
-    instance_type = var.insv
+    instance_type = 
     tags = {
         Name = var.tags
     }
