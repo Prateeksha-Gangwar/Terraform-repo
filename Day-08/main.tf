@@ -18,6 +18,17 @@ resource "aws_subnet" "name" {
   }
 }
 
+resource "aws_subnet" "private" {
+  vpc_id     = aws_vpc.name.id
+  cidr_block = "10.0.1.0/24"
+
+  tags = {
+    Name = "Subnet-2-private"
+  }
+}
+
+
+
 # aws internet gateway resource to create an internet gateway
 resource "aws_internet_gateway" "name" {
   vpc_id = aws_vpc.name.id
@@ -71,14 +82,59 @@ resource "aws_security_group" "name" {
   }
 }
 
+resource "aws_eip" "nat" {
+  domain = "vpc"
+}
+
+resource "aws_nat_gateway" "name" {
+  allocation_id = aws_eip.nat.id
+  subnet_id     = aws_subnet.name.id
+
+  tags = {
+    Name = "my-nat-gateway"
+  }
+
+  depends_on = [aws_internet_gateway.name]
+}
+
+resource "aws_route_table" "private" {
+  vpc_id = aws_vpc.name.id
+
+  tags = {
+    Name = "my-private-route-table"
+  }
+}
+
+resource "aws_route" "private_internet" {
+  route_table_id         = aws_route_table.private.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.name.id
+}
+
+resource "aws_route_table_association" "private" {
+  subnet_id      = aws_subnet.private.id
+  route_table_id = aws_route_table.private.id
+}
+
 # aws instance resource to create an EC2 instance
 resource "aws_instance" "name" {
-  ami                    = "ami-01edba92f9036f76e" # Amazon Linux 2 AMI
+  ami                    = "ami-0fd6b4bfb40773c2d" # Amazon Linux 2 AMI
   instance_type          = "t2.micro"
   subnet_id              = aws_subnet.name.id
   vpc_security_group_ids = [aws_security_group.name.id]
 
   tags = {
     Name = "my-ec2-instance"
+  }
+}
+
+resource "aws_instance" "private" {
+  ami                    = "ami-0fd6b4bfb40773c2d" # Amazon Linux 2 AMI
+  instance_type          = "t2.micro"
+  subnet_id              = aws_subnet.private.id
+  vpc_security_group_ids = [aws_security_group.name.id]
+
+  tags = {
+    Name = "my-private-ec2-instance"
   }
 }
