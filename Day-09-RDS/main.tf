@@ -77,9 +77,9 @@ resource "aws_db_subnet_group" "name" {
     aws_subnet.sub2.id
   ]
 
-  tags = {
-    Name = "RDS-Migrate-SubnetGroup" # Tags can contain uppercase letters
-  }
+  #tags = {
+  # Name = "RDS-Migrate-SubnetGroup" # Tags can contain uppercase letters
+  #}
 }
 
 resource "aws_db_instance" "name" {
@@ -97,4 +97,23 @@ resource "aws_db_instance" "name" {
   publicly_accessible    = true
   maintenance_window     = "Mon:00:00-Mon:03:00"
 
+}
+
+resource "aws_elasticache_serverless_cache" "redis" {
+  engine      = "redis"
+  name        = "mydbprateeksha"
+  description = "Redis Serverless Cache"
+
+  subnet_ids = [
+    aws_subnet.sub1.id,
+    aws_subnet.sub2.id
+  ]
+
+  security_group_ids = [
+    aws_security_group.name.id
+  ]
+
+  tags = {
+    Name = "Redis-Serverless"
+  }
 }
