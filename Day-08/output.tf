@@ -37,3 +37,15 @@ output "instance_private_ip" {
   description = "Private IP address of the EC2 instance."
   value       = aws_instance.name.private_ip
 }
+
+resource "aws_rds_instance" "name" {
+  allocated_storage    = 20
+  engine               = "mysql"
+  engine_version       = "8.0"
+  instance_class       = "db.t2.micro"
+  name                 = "mydb"
+  username             = "admin"
+  password             = "password123"
+  parameter_group_name = "default.mysql8.0"
+  skip_final_snapshot  = true
+}

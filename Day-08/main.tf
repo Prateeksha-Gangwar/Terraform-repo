@@ -138,3 +138,41 @@ resource "aws_instance" "private" {
     Name = "my-private-ec2-instance"
   }
 }
+
+resource "aws_iam_role" "lambda_exec" {
+  name = "lambda_exec_role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_lambda_function" "name" {
+  function_name = "my-lambda-function-WILP"
+  role          = aws_iam_role.lambda_exec.arn
+  handler       = "index.handler"
+  runtime       = "python3.14"
+
+  filename = "lambda_function_payload.zip"
+
+  source_code_hash = filebase64sha256("lambda_function_payload.zip")
+
+  environment {
+    variables = {
+      foo = "bar"
+    }
+  }
+
+  tags = {
+    Name = "my-lambda-function"
+  }
+}
