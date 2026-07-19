@@ -9,7 +9,6 @@ resource "aws_iam_group" "name" {
 resource "aws_iam_policy" "ec2_policy" {
   name        = "Ec222222222"
   description = "EC2 Full Access Policy"
-
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -23,8 +22,27 @@ resource "aws_iam_policy" "ec2_policy" {
   })
 }
 
+
 # Attach Policy to IAM User
 resource "aws_iam_user_policy_attachment" "attach_ec2_policy" {
   user       = aws_iam_user.example.name
   policy_arn = aws_iam_policy.ec2_policy.arn
+}
+
+
+resource "aws_iam_role" "myrole" {
+  name = "myrole1"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
 }
