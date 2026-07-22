@@ -1,7 +1,7 @@
 
 # Key Pair
 resource "aws_key_pair" "example" {
-  key_name   = "lkey"
+  key_name   = "newkey"
   public_key = file("~/.ssh/id_ed25519.pub")
 }
 
@@ -12,7 +12,7 @@ resource "aws_vpc" "myvpc" {
   enable_dns_hostnames = true
 
   tags = {
-    Name = "MyVPC"
+    Name = "MyVPC-Provisioners"
   }
 }
 
@@ -92,7 +92,7 @@ resource "aws_instance" "server" {
 #               EOF
 
   tags = {
-    Name = "UbuntuServer"
+    Name = "UbuntuServer-Pro"
   }
 
   connection {
@@ -103,54 +103,54 @@ resource "aws_instance" "server" {
     timeout     = "5m"
   }
 
-  provisioner "file" {
-    source      = "file10"
-    destination = "/home/ubuntu/file10" #destination path on the remote instance copy the file10 from local to remote instance with the name file10
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "touch /home/ubuntu/file200",
-      "echo 'hello from veera devops cloud nareshit' >> /home/ubuntu/file200"
-    ]
-  }
-   provisioner "local-exec" {
-    command = "touch file500" 
-    
-   
- }
- 
- }
-# resource "null_resource" "run_script" {
-#   provisioner "remote-exec" {
-#     connection {
-#       host        = aws_instance.server.public_ip
-#       user        = "ubuntu"
-#       private_key = file("~/.ssh/id_ed25519")
-#     }
-#      provisioner "file" {
-#     source      = "file10"
-#     destination = "/home/ubuntu/dev.sh" #destination path on the remote instance copy the file10 from local to remote instance with the name file10
+#   provisioner "file" {
+#     source      = "file500"
+#     destination = "/home/ubuntu/file500" #destination path on the remote instance copy the file10 from local to remote instance with the name file10
 #   }
 
-
+#   provisioner "remote-exec" {
 #     inline = [
-#       "echo 'hello from veera Nareshit' >> /home/ubuntu/file200",
-      
-#         #"bash /home/ubuntu/dev.sh" # Assuming test.sh is already on the instance 
+#       "touch /home/ubuntu/file200",
+#       "echo 'hello from veera devops cloud nareshit' >> /home/ubuntu/file200"
 #     ]
 #   }
+#    provisioner "local-exec" {
+#     command = "touch file500" 
+    
+   
+#  }
+ 
+ }
+resource "null_resource" "run_script" {
+  
+    connection {
+      host        = aws_instance.server.public_ip
+      user        = "ubuntu"
+      private_key = file("~/.ssh/id_ed25519")
+    }
+     provisioner "file" {
+    source      = "dev.sh"
+    destination = "/home/ubuntu/dev.sh" #destination path on the remote instance copy the dev.sh from local to remote instance with the name file10
+  }
 
-#   triggers = {
-#     always_run = "${timestamp()}" # This will ensure the provisioner runs every time you apply, as the timestamp will always change.
-#   }
-# #   triggers = {
-# #   script_hash = filemd5("dev.sh") # Rerun only if script changes
-# # }
-# }
+   provisioner "remote-exec" {
+    inline = [
+      "echo 'hello from veera Nareshit' >> /home/ubuntu/file200",
+      
+        #"bash /home/ubuntu/dev.sh" # Assuming test.sh is already on the instance 
+    ]
+  }
+
+  # triggers = {
+  #   always_run = "${timestamp()}" # This will ensure the provisioner runs every time you apply, as the timestamp will always change.
+  # }
+  triggers = {
+  script_hash = filemd5("dev.sh") # Rerun only if script changes
+}
+}
 
 
 #Solution-2 to Re-Run the Provisioner
-# Use terraform taint to manually mark the resource for recreation:
-# terraform taint aws_instance.server
-# terraform apply
+#Use terraform taint to manually mark the resource for recreation:
+#terraform taint aws_instance.server
+#terraform apply
