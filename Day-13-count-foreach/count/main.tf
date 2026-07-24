@@ -1,9 +1,1 @@
-resource "aws_instance" "name"{
-    ami = "ami-0b826bb6d96d2afe4"
-    instance_type = "t2.micro"
-    count = length(var.tags)
-    tags = {
-        Name = var.tags[count.index]
-    }
 
-}
