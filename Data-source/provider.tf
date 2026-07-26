@@ -1,4 +1,2 @@
 provider "aws" {
-  
 }
-prov

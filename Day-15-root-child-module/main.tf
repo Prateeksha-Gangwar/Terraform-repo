@@ -90,3 +90,19 @@ module "iam" {
   policy_arn = var.policy_arn
 
 }
+
+module "load_balancer" {
+  source = "./modules/ALB"
+
+  name       = "my-app-lb"
+  vpc_id     = "vpc-0123456789abcdef0"
+
+  subnet_ids = [
+    "subnet-0123456789abcdef0",
+    "subnet-0987654321abcdef0"
+  ]
+
+  security_groups = [
+    "sg-0a12bc3456789def0"
+  ]
+}
