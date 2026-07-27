@@ -1,18 +1,19 @@
 resource "aws_s3_bucket" "dev_bucket" {
   provider = aws.dev_account
 
-  bucket = "bucketdevhbhdfbdnbcbhhdfbmks"
+  bucket = "bucketdevhbhdfbdnbcbhhdfbmkshhhhhhhhhhh"
 }
 
 resource "aws_s3_bucket" "test_bucket" {
   provider = aws.test_account
 
-  bucket = "buckettestshgsgfjyrunbnch"
+  bucket = "buckettestshgsgfjyrunbnchpppppppppppppppp"
 }
 
 resource "aws_instance" "dev_server" {
     ami = "ami-004f790b835b26145"
     instance_type = "t2.micro"
+    provider = aws.dev_account
     tags = {
       Name = "Dev"
     }
@@ -71,7 +72,7 @@ resource "aws_instance" "test_server" {
   vpc_security_group_ids = [
     aws_security_group.test_sg.id
   ]
-
+ provider = aws.dev_account
   tags = {
     Name = "Test"
   }
