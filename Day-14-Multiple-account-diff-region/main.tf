@@ -72,7 +72,7 @@ resource "aws_instance" "test_server" {
   vpc_security_group_ids = [
     aws_security_group.test_sg.id
   ]
- provider = aws.dev_account
+ provider = aws.test_account
   tags = {
     Name = "Test"
   }
