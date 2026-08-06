@@ -2,7 +2,7 @@ resource "aws_instance" "name" {
     ami = "ami-0bdc7d025135d7b49"
     instance_type = "t3.micro"
     tags = {
-      Name = "CloudINIDevopsecops-Server"
+      Name = "CloudINIDevopsecops"
     }
   
 }
