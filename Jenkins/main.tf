@@ -1,8 +1,12 @@
-resource "aws_instance" "name" {
-  ami           = "ami-0354c98ae10b02961"
-  instance_type = "t2.micro"
-
-  tags = {
-    Name = "CloudINIDevopsecops"
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.0"
+    }
   }
+}
+
+provider "aws" {
+  region = "us-east-1"
 }
