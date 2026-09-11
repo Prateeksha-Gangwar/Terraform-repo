@@ -1,6 +1,6 @@
 resource "aws_instance" "name" {
-    ami = "ami-0bdc7d025135d7b49"
-    instance_type = "t3.micro"
+    ami = "ami-0354c98ae10b02961"
+    instance_type = "t2.micro"
     tags = {
       Name = "CloudINIDevopsecops"
     }
